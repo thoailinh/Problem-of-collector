@@ -1,0 +1,103 @@
+Với một cách hiểu đơn giản ta có thể hình dung một đường đi (walk) trên đồ thị là một danh sách có thứ tự các đỉnh trong đó phần tử đầu tiên và phần tử cuối cùng của danh sách là cùng một đỉnh và tồn tại một cạnh nối giữa hai phần tử liên tiếp trong danh sách.
+Có một người đưa thư cần tìm đường đi qua tất cả các đỉnh trên đồ thị (đầy đủ) sao cho mỗi đỉnh chỉ đi duy nhất một lần và trở về vị xuất phát ban đầu. Hãy viết chương trình tìm đường đi đáp ứng yêu cầu đó và có độ dài càng ngắn càng tốt sử dụng thuật giải heuristic
+INPUT:
+Dòng đầu tiên chứa 2 số e và chuỗi s, đây là số cạnh của đồ thị và tên của đỉnh mà từ đó người đưa thư bắt đầu đi.
+e dòng tiếp theo, mỗi dòng chứa 02 chuỗi u, i và số nguyên dương x (cách nhau bởi khoảng trắng), thể hiện việc có một cạnh với độ dài là x nối từ đỉnh u sang đỉnh i trong đồ thị. Tên của các đỉnh chỉ bao gồm các ký tự trong bảng chữ cái.
+OUTPUT:
+Xuất ra danh sách các đỉnh trên đường đi cách nhau bởi khoảng trắng.
+VÍ DỤ
+20 L
+L P 780
+T P 90
+P L 76
+M T 300
+L H 218
+L T 994
+P H 851
+M P 648
+H T 591
+H M 246
+T M 194
+T H 186
+H L 328
+P M 723
+P T 65
+H P 807
+L M 706
+T L 75
+M L 133
+M H 382
+L H M T P L
+
+20 N
+L V 909
+N R 117
+L N 695
+V N 76
+R H 851
+L R 34
+V H 111
+H N 152
+V R 900
+N L 554
+R N 324
+R V 250
+H R 871
+N H 603
+L H 978
+H V 581
+N V 141
+R L 415
+V L 141
+H L 496
+
+
+
+#include<iostream>
+#include<string>
+#include<map>
+#include<set>
+#include<vector>
+using namespace std;
+
+int main()
+{
+	map <string, map<string, int>> dinh;// khoi tao ma tran dinh cung voi do dai canh
+	int e,x;// so dinh va so canh
+	string s, u, k;
+	set<string> a;//danh sach dinh da di qua
+	vector<string> b;//danh sach duong di
+	cin >> e >> s;// nhap so dinh va dinh bat dau
+	for (int i = 0; i < e; i++)
+	{
+		cin >> u >> k >> x;// cac canh cua do thi + do dai
+		dinh[u][k] = x;
+	}
+	string dau = s;// dinh dau tien
+	a.insert(dau);
+	b.push_back(dau);
+	for (int i = 0; i < dinh.size() - 1; i++)
+	{
+		map<string, int>::iterator c;// khoi tao con tro c 
+		int min = 1000;// gia tri so sanh
+		string kt;
+		for (c = dinh[dau].begin(); c != dinh[dau].end(); c++)// con tro tro tu dau toi cuoi 1 map trong ma tran
+		{
+			if (c->second < min && a.find(c->first) == a.end())// c nhan gia tri nho nhat tu dinh do toi cac dinh con lai
+			{
+				min = c->second;
+				kt = c->first;
+			}
+		}
+		a.insert(kt);
+		b.push_back(kt);
+		dau = kt;
+	}
+	for (int i = 0; i < b.size(); i++)
+	{
+		cout << b[i] << " ";// xuat danh sach duong di
+	}
+	cout << s << endl;// quay ve dinh ban dau
+	system("pause");
+	return 0;
+}
