@@ -1,0 +1,93 @@
+Với một cách hiểu đơn giản ta có thể hình dung một đường đi (walk) trên đồ thị là một danh sách có thứ tự các đỉnh trong đó phần tử đầu tiên và phần tử cuối cùng của danh sách là cùng một đỉnh và tồn tại một cạnh nối giữa hai phần tử liên tiếp trong danh sách.
+Cho một đơn đồ thị hữu hướng với cạnh có trọng số, và một số đường đi, kiểm tra xem các đường đi đó có đúng là đường đi hợp lý trên đồ thị hay không và tính độ dài của đường đi đó
+INPUT:
+Dòng đầu tiên chứa 02 số e và n, đây là số cạnh của đồ thị và số đường đi cần kiểm tra
+e dòng tiếp theo, mỗi dòng chứa 02 chuỗi u, i và số nguyên dương x (cách nhau bởi khoảng trắng), thể hiện việc có một cạnh với độ dài là x nối từ đỉnh u sang đỉnh i trong đồ thị. Tên của các đỉnh chỉ bao gồm các ký tự trong bảng chữ cái.
+n dòng tiếp theo, mỗi dòng chứa một dánh sách các chuỗi cách nhau bởi khoảng trắng, danh sách kết thúc khi gặp dấu chấm câu (.) Đây là các đỉnh trên đường đi cần kiểm tra.
+OUTPUT:
+Ứng với mỗi đường đi, nếu đó đúng là một đường đi trên đồ thị, xuất ra màn hình độ dài của đường đi đó trên một dòng. Nếu đó không phải là đường đi hợp lý, xuất ra chuỗi FALSE
+VÍ DỤ:
+Input
+8 3
+K F 151
+F L 199
+L K 338
+H L 8
+K H 491
+F H 803
+K L 579
+H K 299
+F L F .
+L K H F L .
+L K F L .
+Output
+FALSE
+FALSE
+688
+
+
+#include<iostream>
+#include<string>
+#include<map>
+#include<set>
+#include<vector>
+using namespace std;
+
+int main()
+{
+	map<string, map<string, int>> dothi;
+	int e, n, x;
+	string u, i, j;
+	cin >> e >> n;
+	for (int k = 0; k < e; k++)
+	{
+		cin >> u >> i >> x;
+		dothi[u][i] = x;
+	}
+  // khai bao do thi cung voi khoang cach cua cac dinh 
+	for (int j = 0; j < n; j++)
+	{
+
+		int total = 0;
+		bool l = false;//bien kiem tra
+		cin >> u >> i;//nhap 2 dinh  vi duong di luong bat dau tu 2 dinh tro len
+		map<string, int>::iterator check;
+		check = dothi[u].find(i);
+		if (check == dothi[u].end())// neu 2 dinh nhap vao cung 1 vi tri thi khong phai duong di
+		{
+			cout << "FALSE" << endl;
+		}
+		else//nguoc la
+		{
+			total += check->second;// cong khoang cach giua 2 dinh do de tinh duong di
+			while (1)
+			{
+				cin >> u;//nhap tiep dinh tiep theo
+				if (u == ".")// neu dinh do nhap "." thi khong xet nua 
+				{
+					cout << total << endl;//xuat do dai giua 2 dinh tren thoi
+					l = true;//gan bien la true
+					break;
+				}
+				check = dothi[i].find(u);
+				if (check == dothi[i].end())// kiem tra dinh thu i co noi cac duong nao voi u ko neu kong thi tra ve cuoi day 
+				{
+					cout << "FALSE" << endl;// ko co thi xuat false break
+					break;
+				}
+				total += check->second;// cong tiep khoang cach
+				i = u;// chuyen vi tri tu dinh thu i sang dinh thu u
+			}
+		}
+		if (!l) {
+			while (1) {
+				cin >> u;
+				if (u == ".") {
+					break;
+				}
+			}
+		}
+	}
+	system("pause");
+	return 0;
+}
